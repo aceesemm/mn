@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Список бронирований</h1>
+
+    {% if reservations %}
+        <ul>
+            {% for reservation in reservations %}
+                <li>{{ reservation.customer.name }} забронировал столик №{{ reservation.table.number }} на {{ reservation.date }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Бронирований нет.</p>
+    {% endif %}
+
+    <h2>Отправить заявку на бронирование</h2>
+    <form action="{% url 'create_reservation' %}" method="post">
+        {% csrf_token %}
+        <label for="customer_id">Ваш ID:</label>
+        <input type="number" name="customer_id" required>
+
+        <label for="table_id">ID столика:</label>
+        <input type="number" name="table_id" required>
+
+        <label for="date">Дата бронирования:</label>
+        <input type="date" name="date" required>
+
+        <button type="submit">Забронировать</button>
+    </form>
+
+{% endblock %}

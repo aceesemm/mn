@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Список бронирований</h1>
+
+<ul>
+    {% for reservation in reservations %}
+        <li>{{ reservation.customer.name }} забронировал столик №{{ reservation.table.number }} на {{ reservation.date }}</li>
+    {% empty %}
+        <li>Бронирований нет.</li>
+    {% endfor %}
+</ul>
+
+<h2>Отправить заявку на бронирование</h2>
+<form method="post" action="{% url 'create_reservation' %}">
+    {% csrf_token %}
+
+    <label for="customer_id">Клиент:</label>
+    <select name="customer_id" required>
+        {% for customer in customers %}
+            <option value="{{ customer.id }}">{{ customer.name }}</option>
+        {% endfor %}
+    </select><br><br>
+
+    <label for="table_id">Столик:</label>
+    <select name="table_id" required>
+        {% for table in tables %}
+            <option value="{{ table.id }}">Столик №{{
