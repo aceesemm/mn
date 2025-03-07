@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container">
+        <h1>Отправить заявку на бронирование</h1>
+
+        <form action="{% url 'create_reservation' %}" method="post" class="reservation-form">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="customer_id">Ваш ID:</label>
+                <select name="customer_id" id="customer_id" required>
+                    <option value="">Выберите клиента</option>
+                    {% for customer in customers %}
+                        <option value="{{ customer.id }}">{{ customer.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="table_id">Выберите столик:</label>
+                <select name="table_id" id="table_id" required>
+                    <option value="">Выберите столик</option>
+                    {% for table in tables %}
+                        <option value="{{ table.id }}">Столик №{{ table.number }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="date">Дата бронирования:</label>
+                <input type="date" name="date" id="date" min="{{ today }}" required>
+            </div>
+
+            <button type="submit" class="btn">Забронировать</button>
+        </form>
+
+        <br>
+        <a href="{% url 'reservations_list' %}" class="back-link">Назад к списку бронирований</a>
+    </div>
+
+    <script>
+        document.getElementById("date").min = new Date().toISOString().split("T")[0];
+    </script>
+
+{% endblock %}
